@@ -4,6 +4,7 @@ import OnboardingPage from "./pages/OnboardingPage";
 import AuthLayout from "./layouts/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
 import TriviaPage from "./pages/TriviaPage";
+import "flowbite";
 function App() {
   return (
     <BrowserRouter>
