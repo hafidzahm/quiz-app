@@ -1,12 +1,18 @@
+import { useNavigate } from "react-router";
+
 export default function OnboardingPage() {
+  const navigate = useNavigate();
+  function navigateTriviaPages() {
+    navigate("/trivia/1");
+  }
   return (
-    <div className="flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-center">
-      <Card />
+    <div className="font-montserrat flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-center">
+      <Card navigateTriviaPages={navigateTriviaPages} />
     </div>
   );
 }
 
-function Card() {
+function Card({ navigateTriviaPages }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <a
@@ -25,6 +31,7 @@ function Card() {
       </a>
       <button
         type="button"
+        onClick={navigateTriviaPages}
         className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       >
         Let's start!
