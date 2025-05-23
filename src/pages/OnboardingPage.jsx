@@ -1,59 +1,34 @@
 export default function OnboardingPage() {
   return (
-    <div
-      id="sticky-banner"
-      tabIndex={-1}
-      className="fixed top-0 start-0 z-50 flex justify-between w-full p-4 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
-    >
-      <div className="flex items-center mx-auto">
-        <p className="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400">
-          <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full dark:bg-gray-600 w-6 h-6 items-center justify-center shrink-0">
-            <svg
-              className="w-3 h-3 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 18 19"
-            >
-              <path d="M15 1.943v12.114a1 1 0 0 1-1.581.814L8 11V5l5.419-3.871A1 1 0 0 1 15 1.943ZM7 4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v5a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2V4ZM4 17v-5h1v5H4ZM16 5.183v5.634a2.984 2.984 0 0 0 0-5.634Z" />
-            </svg>
-            <span className="sr-only">Light bulb</span>
-          </span>
-          <span>
-            New brand identity has been launched for the{" "}
-            <a
-              href="https://flowbite.com"
-              className="inline font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            >
-              Flowbite Library
-            </a>
-          </span>
+    <div className="flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-center">
+      <Card />
+    </div>
+  );
+}
+
+function Card() {
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <a
+        href="#"
+        className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      >
+        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Welcome to Quizzz!
+        </h5>
+        <p className="font-normal text-gray-700 dark:text-gray-400">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
+          architecto provident fuga numquam necessitatibus ipsum, deleniti sequi
+          placeat! At architecto similique ullam veritatis! Beatae, repudiandae
+          quas hic harum corporis error?
         </p>
-      </div>
-      <div className="flex items-center">
-        <button
-          data-dismiss-target="#sticky-banner"
-          type="button"
-          className="shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          <svg
-            className="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
-          <span className="sr-only">Close banner</span>
-        </button>
-      </div>
+      </a>
+      <button
+        type="button"
+        className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+      >
+        Let's start!
+      </button>
     </div>
   );
 }

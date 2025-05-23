@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<OnboardingPage />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route element={<AuthLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/trivia/:triviaId" element={<TriviaPage />} />
