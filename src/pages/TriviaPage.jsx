@@ -46,6 +46,7 @@ export default function TriviaPage() {
         {
           question: quiz.question,
           isQuestionAnsweredTrue: booleanAnswer,
+          answer: boolean,
         },
       ]);
       addPage();
@@ -67,12 +68,19 @@ export default function TriviaPage() {
       console.log(page, totalQuiz);
       console.log(answeredQuestion, "<-------- 10 === 10");
       const name = "itsme";
-      let STORAGE = [
-        {
-          username: name,
-          summaries: [answeredQuestion],
-        },
-      ];
+      let STORAGE = {
+        username: name,
+        summaries: [answeredQuestion],
+        dateAttempt: new Intl.DateTimeFormat("en-US", {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date()),
+      };
+
       const GET_SUMMARY = localStorage.getItem(`summary:${name}`);
       if (GET_SUMMARY) {
         STORAGE.summaries = [
@@ -84,7 +92,7 @@ export default function TriviaPage() {
       }
       console.log(STORAGE, "<-----localStorage");
       localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
-      navigate("/dashboard");
+      navigate("/summary", { state: answeredQuestion });
     }
   }
 
