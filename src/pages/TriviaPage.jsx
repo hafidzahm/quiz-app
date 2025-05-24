@@ -1,62 +1,139 @@
 import { useEffect, useState } from "react";
 import http from "../helpers/axios";
-import { useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 export default function TriviaPage() {
   const [quiz, setQuiz] = useState({});
+  const [answeredQuestion, setAnsweredQuestion] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalQuiz, setTotalQuiz] = useState(0);
+  const navigate = useNavigate();
   useEffect(() => {
     fetchQuestion();
+  }, [page]);
+
+  useEffect(() => {
+    countTotalQuiz();
   }, []);
 
-  const { triviaId } = useParams();
-
-  async function fetchQuestion() {
+  async function countTotalQuiz() {
     try {
-      const response = await http.get(`/questions/${triviaId}`);
+      const response = await http.get("/questions");
       console.log(response);
-      console.log(response.data.quiz);
-      setQuiz(response.data.quiz);
+      console.log(response.data.quizzes.length);
+      setTotalQuiz(response.data.quizzes.length);
     } catch (error) {
       console.log(error);
     }
   }
+
+  async function fetchQuestion() {
+    try {
+      const response = await http.get(`/questions/${page}`);
+      console.log(response);
+      console.log(response.data.quiz);
+      setQuiz(response?.data?.quiz);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function submitQuestion(boolean) {
+    try {
+      const booleanAnswer = quiz?.correct_answer === boolean;
+      console.log(boolean);
+      setAnsweredQuestion((prev) => [
+        ...prev,
+        {
+          question: quiz.question,
+          isQuestionAnsweredTrue: booleanAnswer,
+        },
+      ]);
+      addPage();
+      saveToLocalStorage();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function addPage() {
+    if (page < totalQuiz) {
+      setPage(page + 1);
+    }
+    console.log(answeredQuestion);
+  }
+
+  function saveToLocalStorage() {
+    if (answeredQuestion.length === totalQuiz) {
+      console.log(page, totalQuiz);
+      console.log(answeredQuestion, "<-------- 10 === 10");
+      const name = "itsme";
+      let STORAGE = [
+        {
+          username: name,
+          summaries: [answeredQuestion],
+        },
+      ];
+      const GET_SUMMARY = localStorage.getItem(`summary:${name}`);
+      if (GET_SUMMARY) {
+        STORAGE.summaries = [
+          ...JSON.parse(GET_SUMMARY).summaries,
+          answeredQuestion,
+        ];
+      } else {
+        STORAGE.summaries = [answeredQuestion];
+      }
+      console.log(STORAGE, "<-----localStorage");
+      localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
+      navigate("/dashboard");
+    }
+  }
+
   return (
     <div className="w-full min-h-screen bg-amber-200 p-5 flex flex-col justify-start items-center">
-      <CardQuestion question={quiz?.question} />
+      <CardQuestion submitQuestion={submitQuestion} quiz={quiz} />
     </div>
   );
 }
 
-function CardQuestion({ question }) {
+function CardQuestion({ submitQuestion, quiz }) {
   return (
     <div className="block max-w-sm min-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <div className={`min-h-[70vh]`}>
         {" "}
-        {question ? (
+        {quiz ? (
           <>
             <h5 className="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {question}
+              {quiz?.question}
             </h5>
           </>
         ) : (
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h5 className="text-center mb-2 text-8xl font-bold tracking-tight text-gray-900 dark:text-white">
             ...
           </h5>
         )}
       </div>
       <div className="flex flex-col">
-        <button
-          type="button"
-          className="text-white font-bold bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-        >
-          True
-        </button>
-        <button
-          type="button"
-          className="text-white font-bold bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-        >
-          False
-        </button>
+        <>
+          {" "}
+          <button
+            onClick={() => {
+              submitQuestion(true);
+            }}
+            type="button"
+            className="text-white font-bold bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            True
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              submitQuestion(false);
+            }}
+            className="text-white font-bold bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+          >
+            False
+          </button>
+        </>
       </div>
     </div>
   );

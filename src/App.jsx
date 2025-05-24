@@ -14,7 +14,7 @@ function App() {
 
         <Route element={<AuthLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/trivia/:triviaId" element={<TriviaPage />} />
+          <Route path="/trivia" element={<TriviaPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
