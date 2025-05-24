@@ -47,6 +47,11 @@ export default function TriviaPage() {
           question: quiz.question,
           isQuestionAnsweredTrue: booleanAnswer,
           answer: boolean,
+          dateAttempt: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date()),
         },
       ]);
       addPage();
@@ -71,14 +76,6 @@ export default function TriviaPage() {
       let STORAGE = {
         username: name,
         summaries: [answeredQuestion],
-        dateAttempt: new Intl.DateTimeFormat("en-US", {
-          month: "2-digit",
-          day: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }).format(new Date()),
       };
 
       const GET_SUMMARY = localStorage.getItem(`summary:${name}`);

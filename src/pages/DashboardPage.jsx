@@ -15,12 +15,13 @@ export default function DashboardPage() {
     // const GET_USER = localStorage.getItem
     const GET_SUMMARY = localStorage.getItem("summary:itsme");
     const response = JSON.parse(GET_SUMMARY);
+    console.log(response);
     setHistory(response.summaries);
   }
   return (
     <div className="font-montserrat gap-2 flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-start">
       <Card navigateTriviaPages={navigateTriviaPages} />
-      <AttemptHistoryCard />
+      <AttemptHistoryCard history={history} />
     </div>
   );
 }
@@ -48,36 +49,60 @@ function Card({ navigateTriviaPages }) {
     </div>
   );
 }
-function AttemptHistoryCard() {
+function AttemptHistoryCard({ history }) {
   return (
     <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
         Attempt History
       </h5>
-      <div>
-        <HistoryCard />
+      <div className="flex flex-col gap-2 w-full">
+        {history.map((el, index) => {
+          return <HistoryCard key={index} history={history} index={index} />;
+        })}
       </div>
     </div>
   );
 }
-function HistoryCard() {
+function HistoryCard({ history, index }) {
   return (
-    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <div className="flex w-full flex-col items-start justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
-        Attempt History
+        {index + 1}
       </h5>
-      <p className="font-normal text-gray-700 dark:text-gray-400">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
-        architecto provident fuga numquam necessitatibus ipsum, deleniti sequi
-        placeat! At architecto similique ullam veritatis! Beatae, repudiandae
-        quas hic harum corporis error?
-      </p>
+      <div className="mt-2 mb-4 text-sm flex flex-row gap-2 items-center">
+        <h1 className="dark:text-white">
+          Your score is{" "}
+          {
+            history[index].filter((el) => el.isQuestionAnsweredTrue === true)
+              .length
+          }{" "}
+          / {history[index].length}{" "}
+        </h1>
+        <span
+          className={`${
+            history[index].filter((el) => el.isQuestionAnsweredTrue === true)
+              .length <= 5
+              ? "bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-red-400 border border-red-400"
+              : "bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400"
+          }`}
+        >
+          {history.length > 0
+            ? (
+                (history[index].filter(
+                  (el) => el.isQuestionAnsweredTrue === true
+                ).length /
+                  history[index].length) *
+                100
+              ).toFixed(2) // Format to 2 decimal places
+            : "0"}
+        </span>
+      </div>
 
       <button
         type="button"
         className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       >
-        Let's start!
+        Details
       </button>
     </div>
   );
