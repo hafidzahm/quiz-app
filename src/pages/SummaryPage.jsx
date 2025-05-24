@@ -20,7 +20,7 @@ export default function SummaryPage() {
   }
   return (
     <div className="bg-amber-300 min-h-screen flex flex-col items-center gap-2 w-full p-5">
-      <h1 className="text-5xl">Summary Page</h1>;
+      <h1 className="text-5xl">Summary Page</h1>
       <BannerInfo quiz={answer} />
       <div className="flex flex-col gap-2">
         {answer.map((el, index) => {

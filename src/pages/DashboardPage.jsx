@@ -13,6 +13,10 @@ export default function DashboardPage() {
     navigate("/trivia");
   }
 
+  function navigateSummary(index) {
+    navigate("/summary", { state: history[index] });
+  }
+
   function fetchHistory() {
     const GET_SUMMARY = localStorage.getItem(`summary:${GET_USER}`);
     let response = JSON.parse(GET_SUMMARY);
@@ -27,7 +31,7 @@ export default function DashboardPage() {
   return (
     <div className="font-montserrat gap-2 flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-start">
       <Card navigateTriviaPages={navigateTriviaPages} username={GET_USER} />
-      <AttemptHistoryCard history={history} />
+      <AttemptHistoryCard history={history} navigateSummary={navigateSummary} />
     </div>
   );
 }
@@ -55,7 +59,7 @@ function Card({ navigateTriviaPages, username }) {
     </div>
   );
 }
-function AttemptHistoryCard({ history }) {
+function AttemptHistoryCard({ history, navigateSummary }) {
   return (
     <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -66,7 +70,12 @@ function AttemptHistoryCard({ history }) {
           <>
             {history.map((el, index) => {
               return (
-                <HistoryCard key={index} history={history} index={index} />
+                <HistoryCard
+                  key={index}
+                  navigateSummary={navigateSummary}
+                  history={history}
+                  index={index}
+                />
               );
             })}
           </>
@@ -79,7 +88,7 @@ function AttemptHistoryCard({ history }) {
     </div>
   );
 }
-function HistoryCard({ history, index }) {
+function HistoryCard({ history, index, navigateSummary }) {
   return (
     <div className="flex w-full flex-col items-start justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -116,6 +125,9 @@ function HistoryCard({ history, index }) {
 
       <button
         type="button"
+        onClick={() => {
+          navigateSummary(index);
+        }}
         className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       >
         Details
