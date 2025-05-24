@@ -8,6 +8,7 @@ export default function TriviaPage() {
   const [page, setPage] = useState(1);
   const [totalQuiz, setTotalQuiz] = useState(0);
   const navigate = useNavigate();
+  const GET_USER = localStorage.getItem("LOGIN:USER");
   useEffect(() => {
     fetchQuestion();
   }, [page]);
@@ -72,7 +73,7 @@ export default function TriviaPage() {
     if (answeredQuestion.length === totalQuiz) {
       console.log(page, totalQuiz);
       console.log(answeredQuestion, "<-------- 10 === 10");
-      const name = "itsme";
+      const name = GET_USER;
       let STORAGE = {
         username: name,
         summaries: [answeredQuestion],

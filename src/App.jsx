@@ -1,3 +1,4 @@
+import "flowbite";
 import { BrowserRouter, Routes, Route } from "react-router";
 import LoginPage from "./pages/LoginPage";
 import OnboardingPage from "./pages/DashboardPage";
@@ -5,7 +6,6 @@ import AuthLayout from "./layouts/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
 import TriviaPage from "./pages/TriviaPage";
 import SummaryPage from "./pages/SummaryPage";
-import "flowbite";
 
 function App() {
   return (

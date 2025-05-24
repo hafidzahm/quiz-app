@@ -1,9 +1,10 @@
 import { Outlet } from "react-router";
+import Navbar from "../components/Navbar";
 
 export default function AuthLayout() {
   return (
     <div className="font-montserrat">
-      <h1>Navbar</h1>
+      <Navbar />
       <Outlet />
     </div>
   );

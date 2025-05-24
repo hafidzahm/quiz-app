@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
+  const GET_USER = localStorage.getItem("LOGIN:USER");
+
   useEffect(() => {
     fetchHistory();
   }, []);
@@ -12,25 +14,29 @@ export default function DashboardPage() {
   }
 
   function fetchHistory() {
-    // const GET_USER = localStorage.getItem
-    const GET_SUMMARY = localStorage.getItem("summary:itsme");
-    const response = JSON.parse(GET_SUMMARY);
+    const GET_SUMMARY = localStorage.getItem(`summary:${GET_USER}`);
+    let response = JSON.parse(GET_SUMMARY);
+    if (!response || !response.summaries) {
+      setHistory([]); // Ensure history is always an array
+      return;
+    }
+
     console.log(response);
     setHistory(response.summaries);
   }
   return (
     <div className="font-montserrat gap-2 flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-start">
-      <Card navigateTriviaPages={navigateTriviaPages} />
+      <Card navigateTriviaPages={navigateTriviaPages} username={GET_USER} />
       <AttemptHistoryCard history={history} />
     </div>
   );
 }
 
-function Card({ navigateTriviaPages }) {
+function Card({ navigateTriviaPages, username }) {
   return (
     <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
-        Welcome to Quizzz!
+        Welcome to Quizzz, {username}!
       </h5>
       <p className="font-normal text-gray-700 dark:text-gray-400">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
@@ -56,9 +62,19 @@ function AttemptHistoryCard({ history }) {
         Attempt History
       </h5>
       <div className="flex flex-col gap-2 w-full">
-        {history.map((el, index) => {
-          return <HistoryCard key={index} history={history} index={index} />;
-        })}
+        {history?.length > 0 ? (
+          <>
+            {history.map((el, index) => {
+              return (
+                <HistoryCard key={index} history={history} index={index} />
+              );
+            })}
+          </>
+        ) : (
+          <>
+            <h1 className="dark:text-white">History attempt is empty</h1>
+          </>
+        )}
       </div>
     </div>
   );
