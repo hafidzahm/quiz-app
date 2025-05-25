@@ -95,7 +95,7 @@ export default function TriviaPage() {
   }
 
   return (
-    <div className="w-full p-5 flex flex-col justify-start items-center">
+    <div className="w-full lg:max-w-5xl p-5 md:p-10 flex flex-row lg:m-auto justify-start items-center">
       <CardQuestion submitQuestion={submitQuestion} quiz={quiz} />
     </div>
   );
@@ -103,7 +103,7 @@ export default function TriviaPage() {
 
 function CardQuestion({ submitQuestion, quiz }) {
   return (
-    <div className="block max-w-sm md:max-w-xl min-w-sm md:min-w-xl p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
+    <div className="block p-6 bg-white min-w-full max-w-full border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
       <div className={`min-h-[60vh]`}>
         {" "}
         {quiz ? (
@@ -118,7 +118,7 @@ function CardQuestion({ submitQuestion, quiz }) {
           </h5>
         )}
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col lg:flex-row">
         <>
           {" "}
           <button
@@ -126,7 +126,7 @@ function CardQuestion({ submitQuestion, quiz }) {
               submitQuestion(true);
             }}
             type="button"
-            className="text-white font-bold bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 "
+            className="text-white lg:w-full font-bold bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 "
           >
             True
           </button>
@@ -135,7 +135,7 @@ function CardQuestion({ submitQuestion, quiz }) {
             onClick={() => {
               submitQuestion(false);
             }}
-            className="text-white font-bold bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 "
+            className="text-white lg:w-full font-bold bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 "
           >
             False
           </button>

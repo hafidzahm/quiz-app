@@ -38,7 +38,7 @@ export default function DashboardPage() {
 
 function Card({ navigateTriviaPages, username }) {
   return (
-    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+    <div className="flex flex-col lg:max-w-5xl items-start justify-center p-5 md:p-10 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
         Welcome to Quizzz, {username}!
       </h5>
@@ -61,11 +61,11 @@ function Card({ navigateTriviaPages, username }) {
 }
 function AttemptHistoryCard({ history, navigateSummary }) {
   return (
-    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
-      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
+    <div className="flex flex-col w-full lg:max-w-5xl items-start justify-center p-5 md:p-10 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 mb-5 ">
         Attempt History
       </h5>
-      <div className="flex flex-col gap-2 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 w-full">
         {history?.length > 0 ? (
           <>
             {history.map((el, index) => {

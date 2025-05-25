@@ -19,8 +19,10 @@ export default function SummaryPage() {
     navigate("/dashboard");
   }
   return (
-    <div className=" min-h-screen flex flex-col items-center gap-2 w-full p-5">
-      <h1 className="text-6xl">Summary Section</h1>
+    <div className=" min-h-screen flex flex-col items-center gap-2 w-full lg:max-w-5xl lg:m-auto p-5 md:p-10">
+      <div className="flex flex-col md:justify-start w-full mb-5">
+        <h1 className="text-6xl">Summary Section</h1>
+      </div>
       <BannerInfo quiz={answer} />
       <div className="flex flex-col gap-2">
         {answer.map((el, index) => {
@@ -42,7 +44,7 @@ function CardSummary({ quiz }) {
   return (
     <a
       href="#"
-      className="block max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 "
+      className="block  md:w-full p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 "
     >
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
         {quiz?.question}
