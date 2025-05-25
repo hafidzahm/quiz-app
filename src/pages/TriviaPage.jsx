@@ -103,7 +103,7 @@ export default function TriviaPage() {
 
 function CardQuestion({ submitQuestion, quiz }) {
   return (
-    <div className="block max-w-sm min-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
+    <div className="block max-w-sm md:max-w-xl min-w-sm md:min-w-xl p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
       <div className={`min-h-[60vh]`}>
         {" "}
         {quiz ? (
