@@ -29,7 +29,7 @@ export default function DashboardPage() {
     setHistory(response.summaries);
   }
   return (
-    <div className="font-montserrat gap-2 flex flex-col bg-amber-200 min-h-screen w-full items-center p-5 justify-start">
+    <div className="font-montserrat gap-2 flex flex-col min-h-screen w-full items-center p-5 justify-start">
       <Card navigateTriviaPages={navigateTriviaPages} username={GET_USER} />
       <AttemptHistoryCard history={history} navigateSummary={navigateSummary} />
     </div>
@@ -38,11 +38,11 @@ export default function DashboardPage() {
 
 function Card({ navigateTriviaPages, username }) {
   return (
-    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
         Welcome to Quizzz, {username}!
       </h5>
-      <p className="font-normal text-gray-700 dark:text-gray-400">
+      <p className="font-normal text-gray-700 ">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
         architecto provident fuga numquam necessitatibus ipsum, deleniti sequi
         placeat! At architecto similique ullam veritatis! Beatae, repudiandae
@@ -52,7 +52,7 @@ function Card({ navigateTriviaPages, username }) {
       <button
         type="button"
         onClick={navigateTriviaPages}
-        className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
       >
         Let's start!
       </button>
@@ -61,8 +61,8 @@ function Card({ navigateTriviaPages, username }) {
 }
 function AttemptHistoryCard({ history, navigateSummary }) {
   return (
-    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <div className="flex flex-col items-center justify-center max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
         Attempt History
       </h5>
       <div className="flex flex-col gap-2 w-full">
@@ -81,7 +81,7 @@ function AttemptHistoryCard({ history, navigateSummary }) {
           </>
         ) : (
           <>
-            <h1 className="dark:text-white">History attempt is empty</h1>
+            <h1>History attempt is empty</h1>
           </>
         )}
       </div>
@@ -90,12 +90,12 @@ function AttemptHistoryCard({ history, navigateSummary }) {
 }
 function HistoryCard({ history, index, navigateSummary }) {
   return (
-    <div className="flex w-full flex-col items-start justify-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <div className="flex w-full flex-col items-start justify-center max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
         {index + 1}
       </h5>
       <div className="mt-2 mb-4 text-sm flex flex-row gap-2 items-center">
-        <h1 className="dark:text-white">
+        <h1>
           Your score is{" "}
           {
             history[index].filter((el) => el.isQuestionAnsweredTrue === true)
@@ -107,8 +107,8 @@ function HistoryCard({ history, index, navigateSummary }) {
           className={`${
             history[index].filter((el) => el.isQuestionAnsweredTrue === true)
               .length <= 5
-              ? "bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-red-400 border border-red-400"
-              : "bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400"
+              ? "bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-red-400"
+              : "bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-green-400"
           }`}
         >
           {history.length > 0
