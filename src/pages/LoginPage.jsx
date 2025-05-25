@@ -15,10 +15,21 @@ export default function LoginPage() {
   }
 
   function submitInput(e) {
-    e.preventDefault();
-    console.log({ username, password });
-    localStorage.setItem("LOGIN:USER", username);
-    navigate("/dashboard");
+    try {
+      e.preventDefault();
+      if (!username) {
+        throw { message: "Username required" };
+      }
+      if (!password) {
+        throw { message: "Password required" };
+      }
+
+      console.log({ username, password });
+      localStorage.setItem("LOGIN:USER", username);
+      navigate("/dashboard");
+    } catch (error) {
+      alert(error.message);
+    }
   }
   return (
     <div className="font-montserrat bg-amber-100 min-h-screen flex flex-col justify-center p-5">
