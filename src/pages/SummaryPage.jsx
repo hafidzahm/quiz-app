@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router";
 export default function SummaryPage() {
   const [answer, setAnswer] = useState([]);
   const [totalQuiz, setTotalQuiz] = useState(0);
+  const [status, setStatus] = useState("");
   const { state } = useLocation();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function SummaryPage() {
     console.log(state[0]);
     setAnswer(state[0].attemptData);
     setTotalQuiz(state[0].totalQuiz);
+    setStatus(state[0].status);
   }
 
   function navigateDashboard() {
@@ -27,8 +29,8 @@ export default function SummaryPage() {
       <div className="flex flex-col md:justify-start w-full mb-5">
         <h1 className="text-6xl">Summary Section</h1>
       </div>
-      <BannerInfo quiz={answer} totalQuiz={totalQuiz} />
-      <div className="flex flex-col gap-2">
+      <BannerInfo quiz={answer} totalQuiz={totalQuiz} status={status} />
+      <div className="flex flex-col gap-2 w-full min-h-[40vh]">
         {answer.map((el, index) => {
           return <CardSummary key={index} quiz={el} />;
         })}
@@ -36,7 +38,7 @@ export default function SummaryPage() {
       <button
         type="button"
         onClick={navigateDashboard}
-        className="focus:outline-none w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+        className="focus:outline-none w-full lg:max-w-2xl text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
       >
         OK
       </button>
@@ -46,10 +48,7 @@ export default function SummaryPage() {
 
 function CardSummary({ quiz }) {
   return (
-    <a
-      href="#"
-      className="block  md:w-full p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 "
-    >
+    <a className="block md:w-full p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
         {quiz?.question}
       </h5>
@@ -93,11 +92,15 @@ function CardSummary({ quiz }) {
   );
 }
 
-function BannerInfo({ quiz, totalQuiz }) {
+function BannerInfo({ quiz, totalQuiz, status }) {
   return (
     <div
       id="alert-additional-content-1"
-      className="p-4 w-full mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50"
+      className={`p-4 w-full mb-4 ${
+        status === "timeout"
+          ? "text-red-800 border border-red-300 rounded-lg bg-red-50"
+          : "text-blue-800 border border-blue-300 rounded-lg bg-blue-50"
+      } `}
       role="alert"
     >
       <div className="flex items-center">
@@ -111,7 +114,9 @@ function BannerInfo({ quiz, totalQuiz }) {
           <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
         </svg>
         <span className="sr-only">Info</span>
-        <h3 className="text-lg font-medium">Score info</h3>
+        <h3 className="text-lg font-medium">
+          {status === "timeout" ? "Time runs out!" : "Quizzz completed!"}
+        </h3>
       </div>
       <div className="mt-2 mb-4 text-sm flex flex-row gap-2 items-center">
         <h1 className="font-bold">

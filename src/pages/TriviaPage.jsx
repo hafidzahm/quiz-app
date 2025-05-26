@@ -8,7 +8,7 @@ export default function TriviaPage() {
   const [page, setPage] = useState(1);
   const [totalQuiz, setTotalQuiz] = useState(0);
   const [timeOut, setTimeOut] = useState(false);
-  const [timer, setTimer] = useState(15);
+  const [timer, setTimer] = useState(150);
   const navigate = useNavigate();
   const GET_USER = localStorage.getItem("LOGIN:USER");
   useEffect(() => {
@@ -35,11 +35,16 @@ export default function TriviaPage() {
     return () => clearInterval(intervalId);
   }, []);
   useEffect(() => {
-    if (answeredQuestion.length === totalQuiz) {
-      console.log(answeredQuestion, "<----besides effect");
-      console.log("sama");
+    if (timeOut === true) {
+      console.log(answeredQuestion, "<-------- Timeout triggered");
+      saveToLocalStorage(answeredQuestion); // Save the current answers
+      navigate("/summary", {
+        state: [
+          { attemptData: answeredQuestion, totalQuiz, status: "timeout" },
+        ],
+      });
     }
-  }, [answeredQuestion, totalQuiz]);
+  }, [timeOut]); //useEffect based timeOut
 
   function formatTime(time) {
     const minutes = Math.floor(time / 60);
@@ -90,7 +95,7 @@ export default function TriviaPage() {
         console.log(updatedAnswers, "<--- setter");
 
         // Check if all questions are answered
-        if (updatedAnswers.length === totalQuiz || timeOut === true) {
+        if (updatedAnswers.length === totalQuiz) {
           console.log(updatedAnswers, totalQuiz, "<-------ctotalllll");
           saveToLocalStorage(updatedAnswers); // Pass the updated answers
           console.log(updatedAnswers, "<-------- jeroan setter");
@@ -151,7 +156,7 @@ export default function TriviaPage() {
 function CardQuestion({ submitQuestion, quiz }) {
   return (
     <div className="block p-6 bg-white min-w-full max-w-full border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
-      <div className={`min-h-[60vh]`}>
+      <div className={`min-h-[50vh]`}>
         {" "}
         {quiz ? (
           <>
