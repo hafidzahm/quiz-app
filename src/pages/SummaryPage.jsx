@@ -3,16 +3,20 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 export default function SummaryPage() {
+  const [answer, setAnswer] = useState([]);
+  const [totalQuiz, setTotalQuiz] = useState(0);
+  const { state } = useLocation();
+
   useEffect(() => {
     fetchSummary();
   }, []);
-  const [answer, setAnswer] = useState([]);
-  const { state } = useLocation();
+
   const navigate = useNavigate();
 
   function fetchSummary() {
-    console.log(state);
-    setAnswer(state);
+    console.log(state[0]);
+    setAnswer(state[0].attemptData);
+    setTotalQuiz(state[0].totalQuiz);
   }
 
   function navigateDashboard() {
@@ -23,7 +27,7 @@ export default function SummaryPage() {
       <div className="flex flex-col md:justify-start w-full mb-5">
         <h1 className="text-6xl">Summary Section</h1>
       </div>
-      <BannerInfo quiz={answer} />
+      <BannerInfo quiz={answer} totalQuiz={totalQuiz} />
       <div className="flex flex-col gap-2">
         {answer.map((el, index) => {
           return <CardSummary key={index} quiz={el} />;
@@ -89,7 +93,7 @@ function CardSummary({ quiz }) {
   );
 }
 
-function BannerInfo({ quiz }) {
+function BannerInfo({ quiz, totalQuiz }) {
   return (
     <div
       id="alert-additional-content-1"
@@ -113,7 +117,7 @@ function BannerInfo({ quiz }) {
         <h1 className="font-bold">
           Your score is{" "}
           {quiz.filter((el) => el.isQuestionAnsweredTrue === true).length} /{" "}
-          {quiz.length}{" "}
+          {totalQuiz}{" "}
         </h1>
         <span
           className={`${
@@ -126,7 +130,7 @@ function BannerInfo({ quiz }) {
             ? (
                 (quiz.filter((el) => el.isQuestionAnsweredTrue === true)
                   .length /
-                  quiz.length) *
+                  totalQuiz) *
                 100
               ).toFixed(2) // Format to 2 decimal places
             : "0"}

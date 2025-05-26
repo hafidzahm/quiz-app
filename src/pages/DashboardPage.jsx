@@ -5,6 +5,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
   const GET_USER = localStorage.getItem("LOGIN:USER");
+  const totalQuiz = 10;
 
   useEffect(() => {
     fetchHistory();
@@ -14,7 +15,9 @@ export default function DashboardPage() {
   }
 
   function navigateSummary(index) {
-    navigate("/summary", { state: history[index] });
+    const attemptData = history[index];
+
+    navigate("/summary", { state: [{ attemptData, totalQuiz }] });
   }
 
   function fetchHistory() {
@@ -31,7 +34,11 @@ export default function DashboardPage() {
   return (
     <div className="font-montserrat gap-2 flex flex-col min-h-screen w-full items-center p-5 justify-start">
       <Card navigateTriviaPages={navigateTriviaPages} username={GET_USER} />
-      <AttemptHistoryCard history={history} navigateSummary={navigateSummary} />
+      <AttemptHistoryCard
+        history={history}
+        navigateSummary={navigateSummary}
+        totalQuiz={totalQuiz}
+      />
     </div>
   );
 }
@@ -59,7 +66,7 @@ function Card({ navigateTriviaPages, username }) {
     </div>
   );
 }
-function AttemptHistoryCard({ history, navigateSummary }) {
+function AttemptHistoryCard({ history, navigateSummary, totalQuiz }) {
   return (
     <div className="flex flex-col w-full lg:max-w-5xl items-start justify-center p-5 md:p-10 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 mb-5 ">
@@ -75,6 +82,7 @@ function AttemptHistoryCard({ history, navigateSummary }) {
                   navigateSummary={navigateSummary}
                   history={history}
                   index={index}
+                  totalQuiz={totalQuiz}
                 />
               );
             })}
@@ -88,7 +96,7 @@ function AttemptHistoryCard({ history, navigateSummary }) {
     </div>
   );
 }
-function HistoryCard({ history, index, navigateSummary }) {
+function HistoryCard({ history, index, navigateSummary, totalQuiz }) {
   return (
     <div className="flex w-full flex-col items-start justify-center max-w-sm p-6 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
@@ -101,7 +109,7 @@ function HistoryCard({ history, index, navigateSummary }) {
             history[index].filter((el) => el.isQuestionAnsweredTrue === true)
               .length
           }{" "}
-          / {history[index].length}{" "}
+          / {totalQuiz}{" "}
         </h1>
         <span
           className={`${
@@ -116,7 +124,7 @@ function HistoryCard({ history, index, navigateSummary }) {
                 (history[index].filter(
                   (el) => el.isQuestionAnsweredTrue === true
                 ).length /
-                  history[index].length) *
+                  totalQuiz) *
                 100
               ).toFixed(2) // Format to 2 decimal places
             : "0"}

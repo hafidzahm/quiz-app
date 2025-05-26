@@ -90,11 +90,13 @@ export default function TriviaPage() {
         console.log(updatedAnswers, "<--- setter");
 
         // Check if all questions are answered
-        if (updatedAnswers.length === totalQuiz) {
+        if (updatedAnswers.length === totalQuiz || timeOut === true) {
           console.log(updatedAnswers, totalQuiz, "<-------ctotalllll");
           saveToLocalStorage(updatedAnswers); // Pass the updated answers
           console.log(updatedAnswers, "<-------- jeroan setter");
-          navigate("/summary", { state: updatedAnswers });
+          navigate("/summary", {
+            state: [{ attemptData: updatedAnswers, totalQuiz }],
+          });
         }
         console.log(updatedAnswers, "<----return");
 
@@ -120,6 +122,7 @@ export default function TriviaPage() {
     let STORAGE = {
       username: name,
       summaries: [answeredQuestion],
+      totalQuiz: totalQuiz,
     };
 
     const GET_SUMMARY = localStorage.getItem(`summary:${name}`);
@@ -132,10 +135,9 @@ export default function TriviaPage() {
       STORAGE.summaries = [answeredQuestion];
     }
     console.log(STORAGE, "<-----localStorage");
-    if (answeredQuestion.length === totalQuiz) {
-      console.log("saved", totalQuiz);
-      localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
-    }
+
+    console.log("saved", totalQuiz);
+    localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
   }
 
   return (
