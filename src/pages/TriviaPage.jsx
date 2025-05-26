@@ -34,6 +34,12 @@ export default function TriviaPage() {
     // unmount component
     return () => clearInterval(intervalId);
   }, []);
+  useEffect(() => {
+    if (answeredQuestion.length === totalQuiz) {
+      console.log(answeredQuestion, "<----besides effect");
+      console.log("sama");
+    }
+  }, [answeredQuestion, totalQuiz]);
 
   function formatTime(time) {
     const minutes = Math.floor(time / 60);
@@ -69,26 +75,28 @@ export default function TriviaPage() {
       const booleanAnswer = quiz?.correct_answer === boolean;
       console.log(boolean);
       setAnsweredQuestion((prev) => {
-        const updatedAnswers = [
-          ...prev,
-          {
-            question: quiz.question,
-            isQuestionAnsweredTrue: booleanAnswer,
-            answer: boolean,
-            status: timeOut ? "timeout" : "completed",
-            dateAttempt: new Intl.DateTimeFormat("en-US", {
-              month: "2-digit",
-              day: "2-digit",
-              year: "numeric",
-            }).format(new Date()),
-          },
-        ];
+        const newAnswer = {
+          question: quiz.question,
+          isQuestionAnsweredTrue: booleanAnswer,
+          answer: boolean,
+          status: timeOut ? "timeout" : "completed",
+          dateAttempt: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date()),
+        };
+        const updatedAnswers = [...prev, newAnswer];
+        console.log(updatedAnswers, "<--- setter");
 
         // Check if all questions are answered
         if (updatedAnswers.length === totalQuiz) {
+          console.log(updatedAnswers, totalQuiz, "<-------ctotalllll");
           saveToLocalStorage(updatedAnswers); // Pass the updated answers
+          console.log(updatedAnswers, "<-------- jeroan setter");
           navigate("/summary", { state: updatedAnswers });
         }
+        console.log(updatedAnswers, "<----return");
 
         return updatedAnswers; // Update the state
       });
@@ -101,7 +109,7 @@ export default function TriviaPage() {
     }
   }
 
-  function saveToLocalStorage() {
+  function saveToLocalStorage(answeredQuestion) {
     console.log(page, totalQuiz);
     console.log(answeredQuestion.length, totalQuiz, "<----- answered/total");
 
@@ -124,8 +132,10 @@ export default function TriviaPage() {
       STORAGE.summaries = [answeredQuestion];
     }
     console.log(STORAGE, "<-----localStorage");
-    localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
-    navigate("/summary", { state: answeredQuestion });
+    if (answeredQuestion.length === totalQuiz) {
+      console.log("saved", totalQuiz);
+      localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
+    }
   }
 
   return (
