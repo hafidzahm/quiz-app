@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import Banner from "../components/Banner";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [banner, setBanner] = useState("");
+  const { state } = useLocation();
   const navigate = useNavigate("/dashboard");
   useEffect(() => {
     checkLogin();
+    messageBanner();
   }, []);
 
+  function messageBanner() {
+    state && setBanner(state[0].message);
+  }
   function checkLogin() {
     const GET_USER = localStorage.getItem("LOGIN:USER");
     if (GET_USER) {
@@ -51,6 +58,7 @@ export default function LoginPage() {
         password={password}
         setPassword={inputPassword}
         submitData={submitInput}
+        banner={banner}
       />
     </div>
   );
@@ -62,6 +70,7 @@ function LoginDialog({
   password,
   setPassword,
   submitData,
+  banner,
 }) {
   return (
     <section className="border border-gray-500 bg-gray-300 rounded-2xl">
@@ -69,7 +78,15 @@ function LoginDialog({
         <a className="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
           Quizzz!
         </a>
-        <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
+        <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md p-2.5 xl:p-0">
+          {banner && (
+            <Banner
+              color={
+                "flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 "
+              }
+              bannerMessage={banner}
+            />
+          )}
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Sign in to your account

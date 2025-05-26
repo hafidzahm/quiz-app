@@ -12,7 +12,17 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchHistory();
+    checkLogin();
   }, []);
+
+  function checkLogin() {
+    const GET_USER = localStorage.getItem("LOGIN:USER");
+    if (!GET_USER) {
+      navigate("/login", {
+        state: [{ message: `Please login first.` }],
+      });
+    }
+  }
   function navigateTriviaPages() {
     navigate("/trivia");
   }
