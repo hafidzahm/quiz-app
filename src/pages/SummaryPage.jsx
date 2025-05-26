@@ -15,10 +15,13 @@ export default function SummaryPage() {
   const navigate = useNavigate();
 
   function fetchSummary() {
-    console.log(state[0]);
-    setAnswer(state[0].attemptData);
-    setTotalQuiz(state[0].totalQuiz);
-    setStatus(state[0].status);
+    if (!state) {
+      navigateDashboard();
+    } else {
+      setAnswer(state[0].attemptData);
+      setTotalQuiz(state[0].totalQuiz);
+      setStatus(state[0].status);
+    }
   }
 
   function navigateDashboard() {
