@@ -7,6 +7,8 @@ export default function TriviaPage() {
   const [answeredQuestion, setAnsweredQuestion] = useState([]);
   const [page, setPage] = useState(1);
   const [totalQuiz, setTotalQuiz] = useState(0);
+  const [timeOut, setTimeOut] = useState(false);
+  const [timer, setTimer] = useState(15);
   const navigate = useNavigate();
   const GET_USER = localStorage.getItem("LOGIN:USER");
   useEffect(() => {
@@ -15,7 +17,31 @@ export default function TriviaPage() {
 
   useEffect(() => {
     countTotalQuiz();
+    const intervalId = setInterval(() => {
+      setTimer((prevTimer) => {
+        // setter timer
+        if (prevTimer <= 0) {
+          //kalo <= 0 setTimeout true dan hapus interval
+          clearInterval(intervalId);
+          setTimeOut(true);
+
+          return 0;
+        }
+        // kalo bukan kurangi 1
+        return prevTimer - 1;
+      });
+    }, 1000);
+    // unmount component
+    return () => clearInterval(intervalId);
   }, []);
+
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes < 10 ? "0" + minutes : minutes}:${
+      seconds < 10 ? "0" + seconds : seconds
+    }`;
+  }
 
   async function countTotalQuiz() {
     try {
@@ -42,60 +68,69 @@ export default function TriviaPage() {
     try {
       const booleanAnswer = quiz?.correct_answer === boolean;
       console.log(boolean);
-      setAnsweredQuestion((prev) => [
-        ...prev,
-        {
-          question: quiz.question,
-          isQuestionAnsweredTrue: booleanAnswer,
-          answer: boolean,
-          dateAttempt: new Intl.DateTimeFormat("en-US", {
-            month: "2-digit",
-            day: "2-digit",
-            year: "numeric",
-          }).format(new Date()),
-        },
-      ]);
-      addPage();
-      saveToLocalStorage();
+      setAnsweredQuestion((prev) => {
+        const updatedAnswers = [
+          ...prev,
+          {
+            question: quiz.question,
+            isQuestionAnsweredTrue: booleanAnswer,
+            answer: boolean,
+            status: timeOut ? "timeout" : "completed",
+            dateAttempt: new Intl.DateTimeFormat("en-US", {
+              month: "2-digit",
+              day: "2-digit",
+              year: "numeric",
+            }).format(new Date()),
+          },
+        ];
+
+        // Check if all questions are answered
+        if (updatedAnswers.length === totalQuiz) {
+          saveToLocalStorage(updatedAnswers); // Pass the updated answers
+          navigate("/summary", { state: updatedAnswers });
+        }
+
+        return updatedAnswers; // Update the state
+      });
+      console.log(page, totalQuiz);
+      if (page < totalQuiz) {
+        setPage(page + 1); // Move to the next question
+      }
     } catch (error) {
       console.log(error);
     }
   }
 
-  function addPage() {
-    if (page < totalQuiz) {
-      setPage(page + 1);
-    }
-    console.log(answeredQuestion);
-  }
-
   function saveToLocalStorage() {
-    if (answeredQuestion.length === totalQuiz) {
-      console.log(page, totalQuiz);
-      console.log(answeredQuestion, "<-------- 10 === 10");
-      const name = GET_USER;
-      let STORAGE = {
-        username: name,
-        summaries: [answeredQuestion],
-      };
+    console.log(page, totalQuiz);
+    console.log(answeredQuestion.length, totalQuiz, "<----- answered/total");
 
-      const GET_SUMMARY = localStorage.getItem(`summary:${name}`);
-      if (GET_SUMMARY) {
-        STORAGE.summaries = [
-          ...JSON.parse(GET_SUMMARY).summaries,
-          answeredQuestion,
-        ];
-      } else {
-        STORAGE.summaries = [answeredQuestion];
-      }
-      console.log(STORAGE, "<-----localStorage");
-      localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
-      navigate("/summary", { state: answeredQuestion });
+    console.log(page, totalQuiz);
+    console.log(answeredQuestion, "<-------- 10 === 10");
+
+    const name = GET_USER;
+    let STORAGE = {
+      username: name,
+      summaries: [answeredQuestion],
+    };
+
+    const GET_SUMMARY = localStorage.getItem(`summary:${name}`);
+    if (GET_SUMMARY) {
+      STORAGE.summaries = [
+        ...JSON.parse(GET_SUMMARY).summaries,
+        answeredQuestion,
+      ];
+    } else {
+      STORAGE.summaries = [answeredQuestion];
     }
+    console.log(STORAGE, "<-----localStorage");
+    localStorage.setItem(`summary:${name}`, JSON.stringify(STORAGE));
+    navigate("/summary", { state: answeredQuestion });
   }
 
   return (
-    <div className="w-full lg:max-w-5xl p-5 md:p-10 flex flex-row lg:m-auto justify-start items-center">
+    <div className="w-full lg:max-w-5xl p-5 md:p-10 flex flex-col lg:m-auto justify-start items-end">
+      <Timer time={formatTime(timer)} timeout={timeOut} />
       <CardQuestion submitQuestion={submitQuestion} quiz={quiz} />
     </div>
   );
@@ -141,6 +176,22 @@ function CardQuestion({ submitQuestion, quiz }) {
           </button>
         </>
       </div>
+    </div>
+  );
+}
+
+export function Timer({ time, timeout }) {
+  return (
+    <div className="mb-5">
+      {!timeout ? (
+        <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] px-2.5 rounded-sm dark:bg-red-900 dark:text-red-300">
+          {time}
+        </div>
+      ) : (
+        <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] p-5 rounded-sm dark:bg-red-900 dark:text-red-300">
+          TIME RUNS OUT
+        </div>
+      )}
     </div>
   );
 }
