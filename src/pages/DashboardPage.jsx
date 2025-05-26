@@ -50,16 +50,17 @@ function Card({ navigateTriviaPages, username }) {
         Welcome to Quizzz, {username}!
       </h5>
       <p className="font-normal text-gray-700 ">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
-        architecto provident fuga numquam necessitatibus ipsum, deleniti sequi
-        placeat! At architecto similique ullam veritatis! Beatae, repudiandae
-        quas hic harum corporis error?
+        the ultimate destination for fun, fast, and brain-boosting quizzes!
+        Whether you're here to challenge yourself, learn something new, or
+        simply have a good time, you've come to the right place. With a wide
+        variety of topics — from general knowledge and pop culture to science
+        and history — there's always something fresh and exciting to explore.
       </p>
 
       <button
         type="button"
         onClick={navigateTriviaPages}
-        className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+        className="text-white cursor-pointer mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
       >
         Let's start!
       </button>
@@ -136,7 +137,7 @@ function HistoryCard({ history, index, navigateSummary, totalQuiz }) {
         onClick={() => {
           navigateSummary(index);
         }}
-        className="text-white mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+        className="text-white cursor-pointer mt-5 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
       >
         Details
       </button>

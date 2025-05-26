@@ -52,7 +52,7 @@ function LoginDialog({
   submitData,
 }) {
   return (
-    <section className="bg-gray-50 border border-gray-500 bg-gray-300 rounded-2xl">
+    <section className="border border-gray-500 bg-gray-300 rounded-2xl">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a className="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
           Quizzz!
@@ -106,7 +106,8 @@ function LoginDialog({
 
               <button
                 type="submit"
-                className="w-full bg-gray-300 bg-primary-600 border border-gray-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                onClick={submitData}
+                class="text-white bg-blue-700 cursor-pointer w-full hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
                 Sign in
               </button>

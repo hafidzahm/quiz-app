@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 
 export default function TriviaPage() {
   const [quiz, setQuiz] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [answeredQuestion, setAnsweredQuestion] = useState([]);
   const [page, setPage] = useState(1);
   const [totalQuiz, setTotalQuiz] = useState(0);
@@ -67,12 +68,15 @@ export default function TriviaPage() {
 
   async function fetchQuestion() {
     try {
+      setIsLoading(true);
       const response = await http.get(`/questions/${page}`);
       console.log(response);
       console.log(response.data.quiz);
       setQuiz(response?.data?.quiz);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   }
   async function submitQuestion(boolean) {
@@ -147,28 +151,27 @@ export default function TriviaPage() {
 
   return (
     <div className="w-full lg:max-w-5xl p-5 md:p-10 flex flex-col lg:m-auto justify-start items-end">
-      <Timer time={formatTime(timer)} timeout={timeOut} />
-      <CardQuestion submitQuestion={submitQuestion} quiz={quiz} />
+      <Timer time={formatTime(timer)} timeout={timeOut} page={page} />
+      <CardQuestion
+        submitQuestion={submitQuestion}
+        quiz={quiz}
+        loading={isLoading}
+        page={page}
+      />
     </div>
   );
 }
 
-function CardQuestion({ submitQuestion, quiz }) {
+function CardQuestion({ submitQuestion, quiz, loading, page }) {
   return (
     <div className="block p-6 bg-white min-w-full max-w-full border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
       <div className={`min-h-[50vh]`}>
         {" "}
-        {quiz ? (
-          <>
-            <h5 className="mb-2 text-4xl font-bold tracking-tight text-gray-900">
-              {quiz?.question}
-            </h5>
-          </>
-        ) : (
-          <h5 className="text-center mb-2 text-8xl font-bold tracking-tight text-gray-900">
-            ...
+        <>
+          <h5 className="mb-2 text-4xl font-bold tracking-tight text-gray-900">
+            {loading === true ? "loading..." : `${page}. ${quiz?.question}`}
           </h5>
-        )}
+        </>
       </div>
       <div className="flex flex-col lg:flex-row">
         <>
@@ -178,18 +181,28 @@ function CardQuestion({ submitQuestion, quiz }) {
               submitQuestion(true);
             }}
             type="button"
-            className="text-white lg:w-full font-bold bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 "
+            disabled={loading && true}
+            className={`text-white  lg:w-full font-bold ${
+              loading === true ? "bg-green-500" : "bg-green-700 cursor-pointer"
+            } ${
+              loading === true ? "hover:bg-green-600" : "hover:bg-green-800 "
+            }  focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 `}
           >
-            True
+            {!loading ? "True" : "..."}
           </button>
           <button
             type="button"
             onClick={() => {
               submitQuestion(false);
             }}
-            className="text-white lg:w-full font-bold bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 "
+            disabled={loading && true}
+            className={`text-white lg:w-full font-bold ${
+              loading === true ? "bg-red-500" : "bg-red-700 cursor-pointer"
+            } ${
+              loading === true ? "hover:bg-red-600" : "hover:bg-red-800"
+            }  focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 `}
           >
-            False
+            {!loading ? "False" : "..."}
           </button>
         </>
       </div>

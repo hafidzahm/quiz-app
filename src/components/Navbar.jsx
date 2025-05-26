@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="border-gray-200 bg-gray-50 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <a className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl font-semibold whitespace-nowrap">
             Quizzz!
           </span>
@@ -18,7 +18,7 @@ export default function Navbar() {
 
         <a
           onClick={navigateLogout}
-          className="block py-2 px-3 text-white bg-blue-700 rounded-sm "
+          className="block py-2 cursor-pointer px-3 text-white bg-blue-700 rounded-sm "
           aria-current="page"
         >
           Logout
