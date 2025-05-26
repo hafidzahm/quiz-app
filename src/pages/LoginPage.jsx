@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate("/dashboard");
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
+  function checkLogin() {
+    const GET_USER = localStorage.getItem("LOGIN:USER");
+    if (GET_USER) {
+      navigate("/dashboard", {
+        state: [{ message: `Welcome home, ${GET_USER}!` }],
+      });
+    }
+  }
   function inputUsername(e) {
     setUsername(e.target.value);
     // console.log(e.target.value, "<---- username");
@@ -107,7 +119,7 @@ function LoginDialog({
               <button
                 type="submit"
                 onClick={submitData}
-                class="text-white bg-blue-700 cursor-pointer w-full hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                className="text-white bg-blue-700 cursor-pointer w-full hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
                 Sign in
               </button>

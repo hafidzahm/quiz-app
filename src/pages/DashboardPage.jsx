@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import Banner from "../components/Banner";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [history, setHistory] = useState([]);
+  const [banner, setBanner] = useState("");
   const GET_USER = localStorage.getItem("LOGIN:USER");
   const totalQuiz = 10;
 
@@ -22,6 +25,8 @@ export default function DashboardPage() {
 
   function fetchHistory() {
     const GET_SUMMARY = localStorage.getItem(`summary:${GET_USER}`);
+    state && setBanner(state[0].message);
+
     let response = JSON.parse(GET_SUMMARY);
     if (!response || !response.summaries) {
       setHistory([]); // Ensure history is always an array
@@ -33,6 +38,14 @@ export default function DashboardPage() {
   }
   return (
     <div className="font-montserrat gap-2 flex flex-col min-h-screen w-full items-center p-5 justify-start">
+      {banner && (
+        <Banner
+          color={
+            "flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 w-full max-w-5xl"
+          }
+          bannerMessage={banner}
+        />
+      )}
       <Card navigateTriviaPages={navigateTriviaPages} username={GET_USER} />
       <AttemptHistoryCard
         history={history}
