@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import http from "../helpers/axios";
 import { useNavigate } from "react-router";
+import { QuizContext } from "../context/QuizContext";
 
 export default function TriviaPage() {
   const [quiz, setQuiz] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [answeredQuestion, setAnsweredQuestion] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalQuiz, setTotalQuiz] = useState(0);
   const [timeOut, setTimeOut] = useState(false);
-  const [timer, setTimer] = useState(150);
+  const [timer, setTimer] = useState(15);
   const navigate = useNavigate();
-  const GET_USER = localStorage.getItem("LOGIN:USER");
+  const quizContext = useContext(QuizContext);
+
   useEffect(() => {
     fetchQuestion();
   }, [page]);
 
   useEffect(() => {
-    countTotalQuiz();
     const intervalId = setInterval(() => {
       setTimer((prevTimer) => {
         // setter timer
@@ -47,6 +47,9 @@ export default function TriviaPage() {
     }
   }, [timeOut]); //useEffect based timeOut
 
+  const totalQuiz = quizContext?.quiz?.length;
+  const GET_USER = localStorage.getItem("LOGIN:USER");
+
   function formatTime(time) {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -55,19 +58,9 @@ export default function TriviaPage() {
     }`;
   }
 
-  async function countTotalQuiz() {
-    try {
-      const response = await http.get("/questions");
-      console.log(response);
-      console.log(response.data.quizzes.length);
-      setTotalQuiz(response.data.quizzes.length);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async function fetchQuestion() {
     try {
+      console.log(quizContext, "from context");
       setIsLoading(true);
       const response = await http.get(`/questions/${page}`);
       console.log(response);
@@ -151,13 +144,29 @@ export default function TriviaPage() {
 
   return (
     <div className="w-full lg:max-w-5xl p-5 md:p-10 flex flex-col lg:m-auto justify-start items-end">
-      <Timer time={formatTime(timer)} timeout={timeOut} page={page} />
+      <div className="flex  w-full justify-between items-center">
+        <QuestionInfo page={page} totalQuiz={totalQuiz} isLoading={isLoading} />
+        <Timer time={formatTime(timer)} timeout={timeOut} page={page} />
+      </div>
+
       <CardQuestion
         submitQuestion={submitQuestion}
         quiz={quiz}
         loading={isLoading}
         page={page}
       />
+    </div>
+  );
+}
+
+function QuestionInfo({ page, totalQuiz, isLoading }) {
+  return (
+    <div className="mb-5 flex flex-row justify-center items-center bg-blue-100 text-blue-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] px-2.5 rounded-sm ">
+      {isLoading ? (
+        <h1>loading...</h1>
+      ) : (
+        <h1>{`${page} of ${totalQuiz} quizzes.`}</h1>
+      )}
     </div>
   );
 }
@@ -214,12 +223,12 @@ export function Timer({ time, timeout }) {
   return (
     <div className="mb-5">
       {!timeout ? (
-        <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] px-2.5 rounded-sm dark:bg-red-900 dark:text-red-300">
-          {time}
+        <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] px-2.5 rounded-sm ">
+          <h1>{time}</h1>
         </div>
       ) : (
         <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] p-5 rounded-sm dark:bg-red-900 dark:text-red-300">
-          TIME RUNS OUT
+          <h1> TIME RUNS OUT</h1>
         </div>
       )}
     </div>

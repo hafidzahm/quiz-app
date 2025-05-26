@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Banner from "../components/Banner";
+import { QuizContext } from "../context/QuizContext";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -8,7 +9,8 @@ export default function DashboardPage() {
   const [history, setHistory] = useState([]);
   const [banner, setBanner] = useState("");
   const GET_USER = localStorage.getItem("LOGIN:USER");
-  const totalQuiz = 10;
+  const { quiz } = useContext(QuizContext);
+  const totalQuiz = quiz?.length;
 
   useEffect(() => {
     fetchHistory();
@@ -56,7 +58,11 @@ export default function DashboardPage() {
           bannerMessage={banner}
         />
       )}
-      <Card navigateTriviaPages={navigateTriviaPages} username={GET_USER} />
+      <Card username={GET_USER} />
+      <CardTrivia
+        navigateTriviaPages={navigateTriviaPages}
+        totalQuiz={totalQuiz}
+      />
       <AttemptHistoryCard
         history={history}
         navigateSummary={navigateSummary}
@@ -66,9 +72,9 @@ export default function DashboardPage() {
   );
 }
 
-function Card({ navigateTriviaPages, username }) {
+function Card({ username }) {
   return (
-    <div className="flex flex-col lg:max-w-5xl items-start justify-center p-5 md:p-10 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+    <div className="flex flex-col lg:max-w-5xl items-start justify-center p-5 md:p-10 bg-white  rounded-lg shadow-sm hover:bg-gray-100 ">
       <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
         Welcome to Quizzz, {username}!
       </h5>
@@ -79,6 +85,23 @@ function Card({ navigateTriviaPages, username }) {
         variety of topics — from general knowledge and pop culture to science
         and history — there's always something fresh and exciting to explore.
       </p>
+    </div>
+  );
+}
+function CardTrivia({ navigateTriviaPages, totalQuiz }) {
+  return (
+    <div className="flex flex-col lg:max-w-5xl items-start justify-center p-5 md:p-10 bg-white border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100 ">
+      <h5 className="mb-2 text-5xl font-bold tracking-tight text-gray-900 ">
+        Trivia Quiz #1
+      </h5>
+      <p className="font-normal text-gray-700 ">
+        the ultimate destination for fun, fast, and brain-boosting quizzes!
+        Whether you're here to challenge yourself, learn something new, or
+        simply have a good time, you've come to the right place. With a wide
+        variety of topics — from general knowledge and pop culture to science
+        and history — there's always something fresh and exciting to explore.
+      </p>
+      <h1 className="font-bold">Total quiz: {totalQuiz} quizzes</h1>
 
       <button
         type="button"
