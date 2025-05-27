@@ -1,3 +1,5 @@
+import Banner from "./Banner";
+
 export default function LoginDialog({
   username,
   setUsername,
