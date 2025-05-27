@@ -2,6 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import http from "../helpers/axios";
 import { useNavigate } from "react-router";
 import { QuizContext } from "../context/QuizContext";
+import QuestionInfo from "../components/QuestionInfo";
+import CardQuestion from "../components/CardQuestion";
+import Timer from "../components/Timer";
 
 export default function TriviaPage() {
   const [quiz, setQuiz] = useState({});
@@ -155,82 +158,6 @@ export default function TriviaPage() {
         loading={isLoading}
         page={page}
       />
-    </div>
-  );
-}
-
-function QuestionInfo({ page, totalQuiz, isLoading }) {
-  return (
-    <div className="mb-5 flex flex-row justify-center items-center bg-blue-100 text-blue-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] px-2.5 rounded-sm ">
-      {isLoading ? (
-        <h1>loading...</h1>
-      ) : (
-        <h1>{`${page} of ${totalQuiz} quizzes.`}</h1>
-      )}
-    </div>
-  );
-}
-
-function CardQuestion({ submitQuestion, quiz, loading, page }) {
-  return (
-    <div className="block p-6 bg-white min-w-full max-w-full border border-gray-500 rounded-lg shadow-sm hover:bg-gray-100">
-      <div className={`min-h-[50vh]`}>
-        {" "}
-        <>
-          <h5 className="mb-2 text-4xl font-bold tracking-tight text-gray-900">
-            {loading === true ? "loading..." : `${page}. ${quiz?.question}`}
-          </h5>
-        </>
-      </div>
-      <div className="flex flex-col lg:flex-row">
-        <>
-          {" "}
-          <button
-            onClick={() => {
-              submitQuestion(true);
-            }}
-            type="button"
-            disabled={loading && true}
-            className={`text-white  lg:w-full font-bold ${
-              loading === true ? "bg-green-500" : "bg-green-700 cursor-pointer"
-            } ${
-              loading === true ? "hover:bg-green-600" : "hover:bg-green-800 "
-            }  focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 `}
-          >
-            {!loading ? "True" : "..."}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              submitQuestion(false);
-            }}
-            disabled={loading && true}
-            className={`text-white lg:w-full font-bold ${
-              loading === true ? "bg-red-500" : "bg-red-700 cursor-pointer"
-            } ${
-              loading === true ? "hover:bg-red-600" : "hover:bg-red-800"
-            }  focus:outline-none focus:ring-4 focus:ring-red-300 rounded-full text-base px-12 py-6 text-center me-2 mb-2 `}
-          >
-            {!loading ? "False" : "..."}
-          </button>
-        </>
-      </div>
-    </div>
-  );
-}
-
-export function Timer({ time, timeout }) {
-  return (
-    <div className="mb-5">
-      {!timeout ? (
-        <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] px-2.5 rounded-sm ">
-          <h1>{time}</h1>
-        </div>
-      ) : (
-        <div class="flex flex-row justify-center items-center bg-red-100 text-red-800 text-xs font-medium me-2 min-w-[90px] min-h-[45px] p-5 rounded-sm dark:bg-red-900 dark:text-red-300">
-          <h1> TIME RUNS OUT</h1>
-        </div>
-      )}
     </div>
   );
 }
